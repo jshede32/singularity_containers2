@@ -1,0 +1,42 @@
+Bootstrap: docker
+From: caffe2/caffe2:snapshot-py2-cuda9.0-cudnn7-ubuntu16.04
+
+%labels
+       MAINTAINER Jacob Shedenhelm jshede@iastate.edu
+%post
+
+	sudo apt-get install opencv-python
+	
+	git clone --recursive https://github.com/thomaspark-pkj/pyyolo.git
+	cd pyyolo
+	sed -i 's/GPU=0/GPU=1/1' Makefile
+	sed -i 's/OPENCV=0/OPENCV=1/1' Makefile
+	sed -i 's/CUDNN=0/CUDNN=1/1' Makefile
+	make
+	python setup_gpu.py build
+	python setup_gpu.py install
+	cd ..
+
+	echo "Cloning Darknet"
+	git clone https://github.com/pjreddie/darknet
+	cd darknet
+	# update darknet makefile to use correct specifications
+	sed -i 's/CUDNN_HALF=0/CUDNN_HALF=1/1' Makefile
+	sed -i 's/GPU=0/GPU=1/1' Makefile
+	sed -i 's/OPENCV=0/OPENCV=1/1' Makefile
+	sed -i 's/CUDNN=0/CUDNN=1/1' Makefile
+	sed -i 's/DEBUG=0/DEBUG=1/1' Makefile
+	sed -i 's/OPENMP=0/OPENMP=1/1' Makefile
+	make
+	cd ..
+	echo "Deleting the example output images darknet provides"
+	chmod 777 output_images
+	rm -rf output_images
+
+	git clone git://github.com/stevengj/nlopt
+	cd NLopt
+	mkdir build
+	cd build
+	cmake ..
+	make
+	sudo make install
