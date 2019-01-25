@@ -5,8 +5,8 @@ From: caffe2/caffe2:snapshot-py2-cuda9.0-cudnn7-ubuntu16.04
        MAINTAINER Jacob Shedenhelm jshede@iastate.edu
 %post
 
-	sudo apt-get install opencv-python
-	
+	pip install opencv-python
+
 	git clone --recursive https://github.com/thomaspark-pkj/pyyolo.git
 	cd pyyolo
 	sed -i 's/GPU=0/GPU=1/1' Makefile
