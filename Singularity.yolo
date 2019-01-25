@@ -4,7 +4,7 @@ From: caffe2/caffe2:snapshot-py2-cuda9.0-cudnn7-ubuntu16.04
 %labels
        MAINTAINER Jacob Shedenhelm jshede@iastate.edu
 %post
-
+	pip install --upgrade pip
 	pip install opencv-python
 
 	git clone --recursive https://github.com/thomaspark-pkj/pyyolo.git
